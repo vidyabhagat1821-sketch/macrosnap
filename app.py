@@ -98,11 +98,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
-# =========================================================
-# SECRETS
-# =========================================================
-
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 TWILIO_ACCOUNT_SID = st.secrets["TWILIO_ACCOUNT_SID"]
