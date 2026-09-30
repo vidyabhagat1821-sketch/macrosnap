@@ -11,11 +11,6 @@ from prompts import (
     SUMMARY_REQUEST_PROMPT,
 )
 
-
-# =========================================================
-# MODEL SETTINGS
-# =========================================================
-
 MODEL_CANDIDATES = [
     "gemini-3.8-flash",
     "gemini-2.5-flash",
@@ -26,20 +21,12 @@ MODEL_CANDIDATES = [
 MODEL_NAME = MODEL_CANDIDATES[0]
 
 
-# =========================================================
-# PAGE SETTINGS
-# =========================================================
-
 st.set_page_config(
     page_title="MacroSnap",
     page_icon="🥗",
     layout="centered"
 )
 
-
-# =========================================================
-# CUSTOM CSS
-# =========================================================
 
 st.markdown(
     """
@@ -130,11 +117,6 @@ TWILIO_CONTENT_SID = st.secrets[
     "TWILIO_CONTENT_SID"
 ]
 
-
-# =========================================================
-# GEMINI CLIENT
-# =========================================================
-
 @st.cache_resource
 def get_gemini_client():
 
@@ -144,11 +126,6 @@ def get_gemini_client():
 
 
 gemini_client = get_gemini_client()
-
-
-# =========================================================
-# TWILIO CLIENT
-# =========================================================
 
 @st.cache_resource
 def get_twilio_client():
@@ -162,9 +139,6 @@ def get_twilio_client():
 twilio_client = get_twilio_client()
 
 
-# =========================================================
-# DISPLAY MESSAGES
-# =========================================================
 
 def render_message(message):
 
@@ -202,9 +176,6 @@ def add_message(
     )
 
 
-# =========================================================
-# REMEMBER CHAT HISTORY
-# =========================================================
 
 def remember_chat_turn(
     parts,
@@ -249,12 +220,6 @@ def remember_chat_turn(
             )
         ]
     )
-
-
-# =========================================================
-# ASK GEMINI
-# =========================================================
-
 def ask_gemini(parts):
 
     current_model = (
@@ -385,10 +350,6 @@ def ask_gemini(parts):
     return None
 
 
-# =========================================================
-# CREATE WHATSAPP SUMMARY
-# =========================================================
-
 def create_whatsapp_summary():
 
     try:
@@ -430,11 +391,6 @@ def create_whatsapp_summary():
         )
 
         return None
-
-
-# =========================================================
-# SEND WHATSAPP
-# =========================================================
 
 def send_whatsapp(
     to_number,
@@ -499,10 +455,6 @@ def send_whatsapp(
         return False, str(error)
 
 
-# =========================================================
-# ONBOARDING SCREEN
-# =========================================================
-
 if "onboarded" not in st.session_state:
 
     # Center the entire onboarding area
@@ -512,10 +464,7 @@ if "onboarded" not in st.session_state:
 
     with center_space:
 
-        # -------------------------------------------------
-        # LOGO
-        # -------------------------------------------------
-
+    
         st.markdown(
             """
             <div class="macro-logo">
@@ -529,10 +478,7 @@ if "onboarded" not in st.session_state:
             unsafe_allow_html=True
         )
 
-        # -------------------------------------------------
-        # WELCOME
-        # -------------------------------------------------
-
+        
         st.markdown(
             """
             <div class="welcome-title">
@@ -547,9 +493,7 @@ if "onboarded" not in st.session_state:
             unsafe_allow_html=True
         )
 
-        # -------------------------------------------------
-        # FORM
-        # -------------------------------------------------
+        
 
         with st.form(
             "onboarding_form"
@@ -557,7 +501,7 @@ if "onboarded" not in st.session_state:
 
             name = st.text_input(
                 "Your name",
-                placeholder="Harshad"
+                placeholder="Vidya"
             )
 
             whatsapp_number = st.text_input(
@@ -572,9 +516,6 @@ if "onboarded" not in st.session_state:
                 )
             )
 
-        # -------------------------------------------------
-        # SUBMIT
-        # -------------------------------------------------
 
         if submitted:
 
@@ -632,10 +573,6 @@ if "onboarded" not in st.session_state:
     st.stop()
 
 
-# =========================================================
-# MAIN CHAT HEADER
-# =========================================================
-
 header_left, header_right = st.columns(
     [4, 1]
 )
@@ -670,9 +607,6 @@ with header_right:
     )
 
 
-# =========================================================
-# SEND WHATSAPP BUTTON
-# =========================================================
 
 if send_button:
 
@@ -685,10 +619,7 @@ if send_button:
 
     else:
 
-        # ---------------------------------------------
-        # CREATE SUMMARY
-        # ---------------------------------------------
-
+    
         with st.spinner(
             "Summarizing your day..."
         ):
@@ -703,10 +634,7 @@ if send_button:
                 summary
             )
 
-            # -----------------------------------------
-            # SEND TO WHATSAPP
-            # -----------------------------------------
-
+        
             with st.spinner(
                 "Sending to WhatsApp..."
             ):
@@ -741,10 +669,6 @@ if send_button:
                 )
 
 
-# =========================================================
-# SHOW WHATSAPP SUMMARY
-# =========================================================
-
 if st.session_state.get(
     "whatsapp_summary"
 ):
@@ -756,11 +680,6 @@ if st.session_state.get(
     st.write(
         st.session_state.whatsapp_summary
     )
-
-
-# =========================================================
-# WELCOME MESSAGE
-# =========================================================
 
 if not st.session_state.messages:
 
@@ -786,10 +705,6 @@ else:
         )
 
 
-# =========================================================
-# CHAT INPUT
-# =========================================================
-
 user_input = st.chat_input(
     "Ask a question, or attach a photo of your meal",
     accept_file=True,
@@ -799,11 +714,6 @@ user_input = st.chat_input(
         "png"
     ]
 )
-
-
-# =========================================================
-# PROCESS USER INPUT
-# =========================================================
 
 if user_input:
 
@@ -817,10 +727,6 @@ if user_input:
 
     parts = []
 
-
-    # -----------------------------------------------------
-    # PHOTO
-    # -----------------------------------------------------
 
     if photo is not None:
 
@@ -860,11 +766,6 @@ if user_input:
             text
         )
 
-
-    # -----------------------------------------------------
-    # PHOTO WITHOUT TEXT
-    # -----------------------------------------------------
-
     elif photo is not None:
 
         parts.append(
@@ -873,10 +774,7 @@ if user_input:
         )
 
 
-    # -----------------------------------------------------
-    # GEMINI RESPONSE
-    # -----------------------------------------------------
-
+   
     with st.spinner(
         "Crunching the numbers..."
     ):
